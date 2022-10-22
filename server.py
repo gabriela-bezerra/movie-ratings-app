@@ -1,5 +1,6 @@
 """Server for movie ratings app."""
 
+from crypt import methods
 from flask import (Flask, render_template, request, flash, session,
                    redirect)
 from model import connect_to_db, db
@@ -45,6 +46,46 @@ def all_users():
     all_users = crud.get_all_users()
 
     return render_template('all_users.html', users=all_users)
+
+
+@app.route('/users', methods=['POST'])
+def make_user():
+    """Create a new user"""
+
+    email = request.form.get('email')
+    password = request.form.get('password')
+
+    checking_user = crud.get_user_by_email(email)
+
+    if checking_user:
+        flash("This email is already for use by an existing user.")
+    else:
+        checking_user = crud.create_user(email, password)
+        db.session.add(checking_user)
+        db.session.commit()
+        flash("You have successfully created an account! Please login.")
+
+    return redirect('/')
+
+
+@app.route('/login', methods=['POST'])
+def login_user():
+
+    email = request.form.get('email')
+    password = request.form.get('password')
+
+    checking_user = crud.get_user_password_and_user_id(email)
+
+    user_password, user_id = checking_user
+
+    if password == user_password:
+        session['primary_key'] = user_id
+        flash("Logged in!")
+        return redirect('/')
+    elif not user_id:
+        flash("User does not exist.")
+    else:
+        flash("Password does not match. Please try again.")
 
 
 if __name__ == "__main__":
