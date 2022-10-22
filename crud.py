@@ -2,8 +2,6 @@
 
 from model import db, User, Movie, Rating, connect_to_db
 
-# Function starts here!
-
 
 def create_user(email, password):
     """Create and return a new user."""
@@ -20,6 +18,12 @@ def create_movie(title, overview, release_date, poster_path):
         release_date=release_date,
         poster_path=poster_path
     )
+
+
+def get_all_movies():
+    """Gives all movies."""
+
+    return Movie.query.all()
 
 
 def create_rating(user, movie, score):
