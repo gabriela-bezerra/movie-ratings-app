@@ -61,10 +61,10 @@ def create_rating(user, movie, score):
     return Rating(user=user, movie=movie, score=score)
 
 
-def show_all_user_ratings(user_id):
+def filter_ratings_by_user(user_id):
     """Gives all ratings attributed to a user."""
 
-    return Rating.query.get(user_id).all()
+    return Rating.query.filter(Rating.user_id == user_id)
 
 
 if __name__ == '__main__':

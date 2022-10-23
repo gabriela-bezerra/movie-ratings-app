@@ -1,6 +1,7 @@
 """Server for movie ratings app."""
 
 from crypt import methods
+from ssl import ALERT_DESCRIPTION_BAD_CERTIFICATE_HASH_VALUE
 from flask import (Flask, render_template, request, flash, session,
                    redirect)
 from model import connect_to_db, db
@@ -81,18 +82,20 @@ def login_user():
     if password == user_password:
         session['user_id'] = user_id
         flash("Logged in!")
-        return redirect('/')
+        return redirect('/users/<user_id>')
     elif not user_id:
         flash("User does not exist.")
     else:
         flash("Password does not match. Please try again.")
 
 
-@app.route('/users/<user_id>', methods=['POST'])
-def show_user_ratings(user_id):
+@app.route('/users/<user_id>')
+def user_profile(user_id):
     """Show all ratings given by a user."""
 
-    all_user_ratings = crud.show_all_user_ratings(user_id)
+    user_id = session['user_id']
+
+    all_user_ratings = crud.filter_ratings_by_user(user_id)
 
     return render_template('user_profile.html', ratings=all_user_ratings)
 
