@@ -9,5 +9,21 @@
     {{ movie.overview }}
 </p>
 
+<h4>Would You Like to Rate This Movie?</h4>
+<form action='/users/<user_id>' , method="POST">
+    <p>
+        <label for="rating-scores">Score:</label>
+        <select name="score-values" id="rating-score">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+        </select>
+        <input type="submit">
+    </p>
+
+</form>
+
 <img src="{{ movie.poster_path }}">
 {% endblock %}

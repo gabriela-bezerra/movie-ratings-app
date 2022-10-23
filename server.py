@@ -79,7 +79,7 @@ def login_user():
     user_password, user_id = checking_user
 
     if password == user_password:
-        session['primary_key'] = user_id
+        session['user_id'] = user_id
         flash("Logged in!")
         return redirect('/')
     elif not user_id:
@@ -87,6 +87,20 @@ def login_user():
     else:
         flash("Password does not match. Please try again.")
 
+
+@app.route('/user_profile/<user_id>', methods=['POST'])
+def show_user_ratings(user_id):
+    """Show all ratings given by a user."""
+
+    all_user_ratings = crud.show_all_user_ratings(user_id)
+
+    return render_template('user_profile.html', ratings=all_user_ratings)
+
+
+#  given_rating = request.form.get('rating-score')
+#  new_rating = crud.create_rating(user, movie,score)
+
+# cannot access session and ratings.
 
 if __name__ == "__main__":
     connect_to_db(app)

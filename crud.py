@@ -61,6 +61,12 @@ def create_rating(user, movie, score):
     return Rating(user=user, movie=movie, score=score)
 
 
+def show_all_user_ratings(user_id):
+    """Gives all ratings attributed to a user."""
+
+    return Rating.query.get(user_id).all()
+
+
 if __name__ == '__main__':
     from server import app
     connect_to_db(app)
