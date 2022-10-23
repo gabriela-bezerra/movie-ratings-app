@@ -88,7 +88,7 @@ def login_user():
         flash("Password does not match. Please try again.")
 
 
-@app.route('/user_profile/<user_id>', methods=['POST'])
+@app.route('/users/<user_id>', methods=['POST'])
 def show_user_ratings(user_id):
     """Show all ratings given by a user."""
 
