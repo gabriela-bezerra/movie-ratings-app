@@ -41,15 +41,18 @@ def show_movie(movie_id):
 
 
 @app.route('/movies/<movie_id>', methods=['POST'])
-def show_and_rate_movie(movie_id):
-    """Show a particular movie."""
+def rate_movie(movie_id):
+    """Rate a particular movie."""
 
     movie = crud.get_specific_movie(movie_id)
 
     user = User.query.get(session['user_id'])
     score = int(request.form.get('rating-scores'))
+
     new_rating = crud.create_rating(user, movie, score)
 
+    db.session.add(new_rating)
+    db.session.commit()
     flash("You have submitted a rating successfully!")
 
     return render_template('movie_details.html', movie=movie)
@@ -115,14 +118,17 @@ def user_profile(user_id):
     return render_template('user_profile.html', ratings=all_user_ratings)
 
 
-# @app.route('/api/ratings', methods=['POST'])
-# def create_ratings():
+@app.route('/users/<user_id>', methods=['POST'])
+def edit_ratings_from_user(user_id):
+    """Edited ratings given by a user."""
 
-#     user = session['user_id']
-#     score = request.form.get('rating-score')
+    user_id = session['user_id']
 
+    all_user_ratings = crud.filter_ratings_by_user(user_id)
 
-#     new_rating = crud.create_rating(user, movie, score)
+    edit_ratings = request.form.get('movie_rating')
+
+    return render_template('user_profile.html', ratings=all_user_ratings)
 
 
 if __name__ == "__main__":

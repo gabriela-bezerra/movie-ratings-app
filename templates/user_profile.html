@@ -10,8 +10,16 @@
 </ul>
 
 <h2>Ratings</h2>
-<ul>{%for rating in ratings%}
-    <li>{{rating.movie.title}}, Score:{{rating.score}}</li>
-    {%endfor%}
-</ul>
+<form action="/users/{{ user.user_id}}" method="POST">
+    <legend>Check the ratings you would like to edit:</legend>
+    <ul>{%for rating in ratings%}
+        <li>
+            <input type="checkbox" id={{rating.movie.title}} name="movie_rating" value="{{rating.score}}" />
+            <label for={{rating.movie.title}}>{{rating.movie.title}} Score:{{rating.score}}</label>
+        </li>
+        {%endfor%}
+    </ul>
+    <input type="submit">
+</form>
+
 {%endblock%}
