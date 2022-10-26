@@ -10,10 +10,10 @@
 </p>
 
 <h4>Would You Like to Rate This Movie?</h4>
-<form action='/users/<user_id>' , method="POST">
+<form action='/movies/{{ movie.movie_id}}' method="POST">
     <p>
         <label for="rating-scores">Score:</label>
-        <select name="score-values" id="rating-score">
+        <select name="rating-scores">
             <option value="1">1</option>
             <option value="2">2</option>
             <option value="3">3</option>
@@ -22,7 +22,6 @@
         </select>
         <input type="submit">
     </p>
-
 </form>
 
 <img src="{{ movie.poster_path }}">

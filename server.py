@@ -4,7 +4,7 @@ from crypt import methods
 from ssl import ALERT_DESCRIPTION_BAD_CERTIFICATE_HASH_VALUE
 from flask import (Flask, render_template, request, flash, session,
                    redirect)
-from model import connect_to_db, db
+from model import connect_to_db, db, User
 import crud
 from jinja2 import StrictUndefined
 
@@ -35,9 +35,24 @@ def all_movies():
 def show_movie(movie_id):
     """Show a particular movie."""
 
-    get_movie = crud.get_specific_movie(movie_id)
+    movie = crud.get_specific_movie(movie_id)
 
-    return render_template('movie_details.html', movie=get_movie)
+    return render_template('movie_details.html', movie=movie)
+
+
+@app.route('/movies/<movie_id>', methods=['POST'])
+def show_and_rate_movie(movie_id):
+    """Show a particular movie."""
+
+    movie = crud.get_specific_movie(movie_id)
+
+    user = User.query.get(session['user_id'])
+    score = int(request.form.get('rating-scores'))
+    new_rating = crud.create_rating(user, movie, score)
+
+    flash("You have submitted a rating successfully!")
+
+    return render_template('movie_details.html', movie=movie)
 
 
 @app.route('/users')
@@ -100,10 +115,15 @@ def user_profile(user_id):
     return render_template('user_profile.html', ratings=all_user_ratings)
 
 
-#  given_rating = request.form.get('rating-score')
-#  new_rating = crud.create_rating(user, movie,score)
+# @app.route('/api/ratings', methods=['POST'])
+# def create_ratings():
 
-# cannot access session and ratings.
+#     user = session['user_id']
+#     score = request.form.get('rating-score')
+
+
+#     new_rating = crud.create_rating(user, movie, score)
+
 
 if __name__ == "__main__":
     connect_to_db(app)
